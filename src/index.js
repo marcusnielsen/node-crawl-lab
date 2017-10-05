@@ -23,12 +23,12 @@ const documentToAnchors = document => document.querySelectorAll("a");
 
 const pickHref = ({ href }) => href;
 
-const resToDocument = ({ data }) => new JSDOM(data).window.document;
+const resToHtmlDocument = ({ data }) => new JSDOM(data).window.document;
 
-const domToArrayOfHref = document =>
+const htmlDocumentToArrayOfHref = document =>
   Array.from(documentToAnchors(document)).map(pickHref);
 
-const getDocument = url => axios.get(url).then(resToDocument);
+const getHtmlDocument = url => axios.get(url).then(resToHtmlDocument);
 
 // eslint-disable-next-line no-console
 const onSuccessPut = data => console.log(data);
@@ -39,7 +39,7 @@ const onErrorPut = error => console.error(error);
 inquirer
   .prompt(questions)
   .then(questionsToUrlString)
-  .then(getDocument)
-  .then(domToArrayOfHref)
+  .then(getHtmlDocument)
+  .then(htmlDocumentToArrayOfHref)
   .then(onSuccessPut)
   .catch(onErrorPut);
